@@ -298,7 +298,6 @@ class BinaryTree:
     """
         Find the level averages (i.e. the average of values in each level) of a binary tree 
     """
-
     # Time = O(n)
     # Space = O(n)
     def find_level_averages(root):
@@ -310,7 +309,7 @@ class BinaryTree:
             curr_node = level_queue.popleft()
             if curr_node:
                 # Processing same level
-                sum += curr_node.val
+                sum += curr_node.data
                 count += 1
                 if curr_node.left:
                     level_queue.append(curr_node.left)
@@ -324,6 +323,26 @@ class BinaryTree:
                 if level_queue:
                     level_queue.append(None)
         return result
+
+    """ 
+        Find the level order successor of node given its key as an input
+    """
+
+    # Time = O(n)
+    # Space = O(n)
+    def find_successor(root, key):
+        if not root:
+            return None
+        queue = deque([root])
+        while queue:
+            curr_node = queue.popleft()
+            if curr_node.left:
+                queue.append(curr_node.left)
+            if curr_node.right:
+                queue.append(curr_node.right)
+            if curr_node.data == key:
+                break
+        return queue[0] if queue else None
 
 
     def is_identical_tree(self, root1, root2):
