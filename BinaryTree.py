@@ -300,7 +300,7 @@ class BinaryTree:
     """
     # Time = O(n)
     # Space = O(n)
-    def find_level_averages(root):
+    def find_level_averages(self, root):
         result = []
         sum = 0
         count = 0
@@ -330,7 +330,7 @@ class BinaryTree:
 
     # Time = O(n)
     # Space = O(n)
-    def find_successor(root, key):
+    def find_successor(self, root, key):
         if not root:
             return None
         queue = deque([root])
@@ -344,6 +344,67 @@ class BinaryTree:
                 break
         return queue[0] if queue else None
 
+    """
+        Return the zig-zag traversal of the given tree
+    """
+
+    # Time = O(n)
+    # Space = O(n)
+    def zig_zag_traverse(self, root):
+        if not root:
+            return None
+        result = []
+        level_queue = deque()
+        node_queue = deque([root, None])
+        is_left = True
+        while node_queue:
+            curr_node = node_queue.popleft()
+            if curr_node:
+                # Processing the same level
+                if is_left:
+                    level_queue.append(curr_node.val)
+                else:
+                    level_queue.appendleft(curr_node.val)
+
+                if curr_node.left:
+                    node_queue.append(curr_node.left)
+                if curr_node.right:
+                    node_queue.append(curr_node.right)
+            else:
+                # Done processing the current level
+                result.append(level_queue)
+                if node_queue:
+                    node_queue.append(None)
+                is_left = not is_left
+                level_queue = deque()
+
+        return result
+
+    """
+        Connect the node in each level to its level order successor
+            with the last node of each level pointing to None
+    """
+
+    # Time = O(n)
+    # Space = O(n)
+    def connect_level_order_siblings(self, root):
+        if not root:
+            return
+        queue = deque([root, None])
+        while queue:
+            curr_node = queue.popleft()
+            if curr_node:
+                # Processing curr level
+                curr_node.next = queue[0]
+                if curr_node.left:
+                    queue.append(curr_node.left)
+                if curr_node.right:
+                    queue.append(curr_node.right)
+            else:
+                # Done processing the curr level
+                if queue:
+                    queue.append(None)
+        return
 
     def is_identical_tree(self, root1, root2):
         if not root1 and not root2:
