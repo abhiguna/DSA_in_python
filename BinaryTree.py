@@ -406,6 +406,24 @@ class BinaryTree:
                     queue.append(None)
         return
 
+    """
+        Find whether the BST is valid given its root node
+    """
+
+    # Time = O(n)
+    # Space = O(n)
+    def is_bst_rec(self, root, min_val, max_val):
+        if not root:
+            return True
+        if root.data < min_val or root.data > max_val:
+            return False
+        return self.is_bst_rec(root.left, min_val, root.data) and \
+               self.is_bst_rec(root.right, root.data, max_val)
+
+    def is_bst(self, root):
+        return self.is_bst_rec(root, float('-inf'), float('inf'))
+
+
     def is_identical_tree(self, root1, root2):
         if not root1 and not root2:
             return True
