@@ -453,8 +453,67 @@ class BinaryTree:
         dfs_inorder(root)
         return head
 
+    """
+        Given the root of a binary tree, print the nodes along its perimeter.
+        Time = O(n)
+        Space = O(h), h = height of the tree [O(n)/O(logn)]
+    """
+
+    # Print across left boundary
+    def print_left_boundary(self, root, result):
+        while root:
+            curr_val = root.data
+            if root.left:
+                root = root.left
+            elif root.right:
+                root = root.right
+            else:  # Leaf node
+                break
+            result.append(str(curr_val) + " ")
+
+    # Print across right boundary
+    def print_right_boundary(self, root, result):
+        stack = []
+        while root:
+            curr_val = root.data
+            if root.right:
+                root = root.right
+            elif root.left:
+                root = root.left
+            else:  # leaf node
+                break
+            stack.append(curr_val)
+
+        while stack:
+            result.append(str(stack.pop()) + " ")
+
+    # Print leaves of the tree
+    def print_leaves(self, root, result):
+        if not root:
+            return
+        self.print_leaves(root.left, result)
+        # Self: leaf node
+        if not root.left and not root.right:
+            result.append(str(root.data) + " ")
+        self.print_leaves(root.right, result)
+
+    def display_tree_perimeter(self, root):
+        if not root:
+            return ""
+        result = []
+        result.append(str(root.data) + " ")
+        self.print_left_boundary(root.left, result)
+        if root.left or root.right:
+            self.print_leaves(root, result)
+        self.print_right_boundary(root.right, result)
+        return "".join(result)
 
 
+    """
+        Given the roots of two trees, determine whether they are identical in structure and value.
+        Time = O(n)
+        Space = O(h), h = height of the tree
+    """
     def is_identical_tree(self, root1, root2):
         if not root1 and not root2:
             return True
