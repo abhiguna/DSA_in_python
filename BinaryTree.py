@@ -423,6 +423,37 @@ class BinaryTree:
     def is_bst(self, root):
         return self.is_bst_rec(root, float('-inf'), float('inf'))
 
+    """
+        Given a BST, create a doubly-linked list in-place that is in sorted order
+        (Hint: Use inorder traversal)
+    """
+
+    # Time = O(n)
+    # Space = O(n)
+    def convert_to_linked_list(self, root):
+        if not root:
+            return None
+        # inorder: L-N-R
+        def dfs_inorder(node):
+            nonlocal head
+            nonlocal tail
+            if not node:
+                return None
+            dfs_inorder(node.left)
+            # node
+            if tail:
+                tail.right = node
+                node.left = tail
+            else:
+                head = node
+            tail = node
+            dfs_inorder(node.right)
+        head = None
+        tail = None
+        dfs_inorder(root)
+        return head
+
+
 
     def is_identical_tree(self, root1, root2):
         if not root1 and not root2:
