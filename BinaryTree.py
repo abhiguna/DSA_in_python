@@ -1,3 +1,5 @@
+import pickle
+import sys
 from random import random
 
 from BinaryTreeNode import BinaryTreeNode
@@ -528,6 +530,84 @@ class BinaryTree:
                 last = last.next
             current = current.next
         return root
+
+    """
+        Given the root of a binary tree, serialize and deserialize it.
+        https://www.educative.io/module/lesson/data-structures-in-python/m7rVmNVXkxE
+        
+        Time = O(n)
+        Space = O(height)
+        
+    """
+
+    MARKER = sys.maxsize
+
+    def serialize(self, node, stream):
+        nonlocal MARKER
+        if not node:
+            stream.dump(MARKER)
+            return
+        stream.dump(node.data);
+        self.serialize(node.left, stream)
+        self.serialize(node.right, stream)
+
+    def deserialize(self, stream):
+        try:
+            nonlocal MARKER
+
+            data = pickle.load(stream)
+            if data == MARKER:
+                return None
+
+            node = BinaryTreeNode(data);
+            node.left = self.deserialize(stream)
+            node.right = self.deserialize(stream)
+            return node
+        except pickle.UnpicklingError:
+            return None
+
+    # Serializing/deserializing in python ~ sample code
+    # arr = [100, 50, 200, 25, 75, 125, 350]
+    # root = create_BST(arr)
+    # display_level_order(root)
+    # output = open('data.class', 'wb')
+    # p = pickle.Pickler(output)
+    # serialize(root, p)
+    # output.close()
+    # input2 = open('data.class', 'rb')
+    # root_deserialized = deserialize(input2)
+    # print("Result:")
+    # display_level_order(root_deserialized)
+
+    """
+        Given the root of a BST, find the kth highest node in the BST
+        https://www.educative.io/module/lesson/data-structures-in-python/qZO8y7mxAVr
+        
+        Time = O(n)
+        Space = O(height)
+    """
+
+    current_count = 0
+
+    def find_nth_highest_in_bst(self, node, n):
+        if node == None:
+            return None
+
+        result = self.find_nth_highest_in_bst(node.right, n)
+        if result != None:
+            return result
+
+        global current_count
+        current_count = current_count + 1
+
+        if n == current_count:
+            return node
+
+        result = self.find_nth_highest_in_bst(node.left, n)
+        if result != None:
+            return result
+
+        return None
 
     """
         Given the roots of two trees, determine whether they are identical in structure and value.
