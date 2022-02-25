@@ -508,6 +508,26 @@ class BinaryTree:
         self.print_right_boundary(root.right, result)
         return "".join(result)
 
+    """
+        Given the root of a binary tree, connect the next pointer of each node to point to its sibling.
+        https://www.educative.io/module/lesson/data-structures-in-python/m7RwAJYz9qr
+        
+        Time = O(n)
+        Space = O(1)
+    """
+    def populate_sibling_pointers(self, root):
+        if not root:
+            return
+        current = last = root
+        while current:
+            if current.left:
+                last.next = current.left
+                last = last.next
+            if current.right:
+                last.next = current.right
+                last = last.next
+            current = current.next
+        return root
 
     """
         Given the roots of two trees, determine whether they are identical in structure and value.
